@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+
+<!--
+ * @author      Andreas Knollmann
+ * @copyright   2014-2024 Softwareentwicklung Andreas Knollmann
+ * @license     http://www.opensource.org/licenses/mit-license.php MIT
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Infrangible_Smtp::infrangible_smtp" title="SMTP" module="Infrangible_Smtp" sortOrder="790" resource="Infrangible_Smtp::infrangible_smtp" parent="Infrangible_Foundation::menu"/>
+        <add id="Infrangible_Smtp::infrangible_smtp_log" title="Logs" module="Infrangible_Smtp" sortOrder="10" resource="Infrangible_Smtp::infrangible_smtp" action="infrangible_smtp/log/index" parent="Infrangible_Smtp::infrangible_smtp"/>
+    </menu>
+</config>
