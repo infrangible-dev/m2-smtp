@@ -7,7 +7,7 @@ use FeWeDev\Base\Json;
 use Infrangible\Core\Controller\Adminhtml\Ajax;
 use Infrangible\Core\Helper\Registry;
 use Infrangible\Core\Helper\Stores;
-use Infrangible\Smtp\Model\MailFactory;
+use Infrangible\SimpleMail\Model\MailFactory;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Exception\MailException;
 use Psr\Log\LoggerInterface;
