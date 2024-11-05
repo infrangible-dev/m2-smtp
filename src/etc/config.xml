@@ -9,7 +9,8 @@
     <default>
         <infrangible_smtp>
             <general>
-                <enable>0</enable>
+                <enable>1</enable>
+                <system_fallback>1</system_fallback>
             </general>
             <server>
                 <enable>0</enable>

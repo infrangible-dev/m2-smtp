@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Infrangible\Smtp\Controller\Adminhtml\Smtp;
 
 use FeWeDev\Base\Arrays;
@@ -17,8 +19,7 @@ use Psr\Log\LoggerInterface;
  * @copyright   2014-2024 Softwareentwicklung Andreas Knollmann
  * @license     http://www.opensource.org/licenses/mit-license.php MIT
  */
-class Mail
-    extends Ajax
+class Mail extends Ajax
 {
     /** @var Stores */
     protected $storeHelper;
@@ -29,15 +30,6 @@ class Mail
     /** @var MailFactory */
     protected $mailFactory;
 
-    /**
-     * @param Arrays          $arrays
-     * @param Json            $json
-     * @param Stores          $storeHelper
-     * @param Registry        $registryHelper
-     * @param Context         $context
-     * @param LoggerInterface $logging
-     * @param MailFactory     $mailFactory
-     */
     public function __construct(
         Arrays $arrays,
         Json $json,
@@ -47,7 +39,12 @@ class Mail
         LoggerInterface $logging,
         MailFactory $mailFactory
     ) {
-        parent::__construct($arrays, $json, $context, $logging);
+        parent::__construct(
+            $arrays,
+            $json,
+            $context,
+            $logging
+        );
 
         $this->storeHelper = $storeHelper;
         $this->registryHelper = $registryHelper;
@@ -61,26 +58,57 @@ class Mail
     public function execute()
     {
         $senderIdentity = $this->_request->getParam('infrangible_smtp_test_mail_sender');
-        $senderEMail = $this->storeHelper->getStoreConfig(sprintf('trans_email/ident_%s/email', $senderIdentity));
-        $senderName = $this->storeHelper->getStoreConfig(sprintf('trans_email/ident_%s/name', $senderIdentity));
+        $senderEMail = $this->storeHelper->getStoreConfig(
+            sprintf(
+                'trans_email/ident_%s/email',
+                $senderIdentity
+            )
+        );
+        $senderName = $this->storeHelper->getStoreConfig(
+            sprintf(
+                'trans_email/ident_%s/name',
+                $senderIdentity
+            )
+        );
         $receiver = $this->_request->getParam('infrangible_smtp_test_mail_receiver');
 
-        $this->addResponseValue('content', 'Whoa!');
+        $this->addResponseValue(
+            'content',
+            'Whoa!'
+        );
 
         $mail = $this->mailFactory->create();
 
-        $mail->addSender($senderEMail, $senderName);
-        $mail->addReceiver($receiver);
+        $mail->addSender(
+            $senderEMail,
+            $senderName
+        );
+        if (strpos(
+                $receiver,
+                ';'
+            ) !== false) {
+            foreach (explode(
+                ';',
+                $receiver
+            ) as $email) {
+                $mail->addReceiver($email);
+            }
+        } else {
+            $mail->addReceiver($receiver);
+        }
         $mail->setType('text/plain');
         $mail->setSubject('SMTP Mail Test');
-        $mail->setBody(__('This is a test message.'));
+        $mail->setBody(__('This is a test message.')->render());
 
         try {
-            $this->registryHelper->register('smtp_test', true);
+            $this->registryHelper->register(
+                'smtp_test',
+                true
+            );
 
             $mail->send();
 
-            $this->setSuccessResponse(__('The message was successfully sent.'));
+            $this->setSuccessResponse(__('The message was successfully sent.')->render());
         } catch (MailException $exception) {
             $this->setErrorResponse($exception->getMessage());
         }
