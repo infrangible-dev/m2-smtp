@@ -27,10 +27,9 @@ class Grid extends \Infrangible\BackendWidget\Block\Grid
     }
 
     /**
-     * @return void
      * @throws Exception
      */
-    protected function prepareFields()
+    protected function prepareFields(): void
     {
         $this->addTextColumn(
             'from',
